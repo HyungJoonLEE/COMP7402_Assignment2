@@ -23,8 +23,8 @@ bool Task1::isValidExtension(const string& fileName) {
 }
 
 
-int Task1::process(const string& fileName) {
-    ifstream inputFile(fileName);
+int Task1::process(const string& txtFile) {
+    ifstream inputFile(txtFile);
 
     if (!inputFile.is_open()) {
         std::cerr << "Error opening files!" << std::endl;
@@ -45,15 +45,15 @@ int Task1::process(const string& fileName) {
     return 1;
 }
 
-int Task1::saveToCSV(const string &fileName) {
-    std::ofstream outputFile(fileName);
+
+int Task1::saveToCSV(const string &csvFile) {
+    ofstream outputFile(csvFile);
 
     if (!outputFile.is_open()) {
-        std::cerr << "Error opening output file!" << std::endl;
+        cerr << "Error opening output file!" << endl;
         return 0;
     }
-
-    outputFile << "letter,count\n"; // CSV Header
+    outputFile << "letter,count\n";
     for (const auto& pair : _LMap) {
         outputFile << pair.first << "," << pair.second << "\n";
     }
@@ -63,6 +63,37 @@ int Task1::saveToCSV(const string &fileName) {
 }
 
 
+double Task1::sumOfProb() {
+    unsigned int count = 0;
+    double sum = 0;
+
+    // Calculate the total count
+    for (const auto& pair : _LMap) {
+        count += pair.second;
+    }
+
+    // Calculate probability and update the sum
+    for (const auto& pair : _LMap) {
+        double prob = static_cast<double>(pair.second) / count;
+        _PMap[pair.first] = prob;
+        sum += prob;
+    }
+
+    return sum;
+}
+
+
+void Task1::showSumOfProb() {
+    double sum = sumOfProb();
+
+    cout << "\nSum of the probabilities of each distribution =\n";
+    for (const auto& pair : _PMap) {
+        std::cout << std::fixed << std::setprecision(7) << pair.second << " + ";
+    }
+
+    cout << "\b\b\b"; // Remove the last " + "
+    cout << "\nTotal Sum = " << std::fixed << setprecision(7) << sum << endl;
+}
 
 
 

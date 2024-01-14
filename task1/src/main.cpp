@@ -10,6 +10,7 @@ int main() {
             ("Please enter the name of the CSV file to write to (e.g., 'output.csv'): ");
     if (t1.process(txtFile)) {
         t1.saveToCSV(csvFile);
+        t1.showSumOfProb();
     }
     return 0;
 }

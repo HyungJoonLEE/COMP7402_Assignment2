@@ -7,19 +7,22 @@
 #include <iostream>
 #include <fstream>
 #include <cctype>
+#include <iomanip>
 
 
 using namespace std;
 
 class Task1 {
 private:
-    unordered_map<char, int> _LMap;
+    unordered_map<char, int> _LMap;     // Map for letter counts
+    unordered_map<char, double> _PMap;  // Map for probilities
 public:
     string getFileNameInput(const string& prompt);
     bool isValidExtension(const string& fileName);
-    int process(const string& fileName);
-    int saveToCSV(const std::string& fileName);
-
+    int process(const string& txtFile);
+    int saveToCSV(const string& csvFile);
+    double sumOfProb();
+    void showSumOfProb();
 };
 
 
