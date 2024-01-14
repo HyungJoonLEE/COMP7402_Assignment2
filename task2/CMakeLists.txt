@@ -16,3 +16,5 @@ file(GLOB_RECURSE PROJECT_FILES
 add_executable(task2 ${PROJECT_FILES})
 
 target_include_directories(task2 PRIVATE ${INCLUDE_DIR})
+target_compile_features(task2 PRIVATE cxx_std_17)
+
