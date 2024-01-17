@@ -66,16 +66,6 @@ void Task2::encode(const string &inFile, const string &outFile, int shift) {
 }
 
 
-int Task2::LocateIndex(const char *str, char ch) {
-    for (int i = 0; i < MAXSUB; i++) {
-        if (ch == str[i]) {
-            return i;
-        }
-    }
-    return 0;
-}
-
-
 void Task2::calculateFrequency(ifstream &fp) {
     char ch;
     totalCharacters = 0;
@@ -183,11 +173,23 @@ void Task2::appendToCSV(const string &fileName, const string &instruction) {
 }
 
 
-void Task2::printConditionalProbabilities(int key) {
+void Task2::printConditionalProbabilities(int key, const string &fileName) {
+    ofstream file(fileName, ios::app);
+    if (!file) {
+        cerr << "Cannot open file for appending: " << fileName << endl;
+        exit(1);
+    }
+
+    file << "Offset(Key): " << key << endl;
+    cout << "Offset(Key): " << key << endl;
     for (char plainChar : {'e', 't', 'a', 'i', 'o', 'n'}) {
         char cipherChar = (plainChar  - 'a' + key) % 26 + 'a';
         std::cout << "P(M=" << plainChar << "|" << cipherChar << ") = "
             << plainTxtProb[plainChar] / cipherTxtProb[cipherChar] << std::endl;
+        file << "P(M=" << plainChar << "|" << cipherChar << ") = "
+             << plainTxtProb[plainChar] / cipherTxtProb[cipherChar] << endl;
     }
+    cout << endl;
+    file << endl;
 }
 
