@@ -1,5 +1,5 @@
 /*---------------------------------------------------------------------------------------------
---	SOURCE FILE:	random.c - the code for the Caesar cipher for a simple substitution
+--	SOURCE FILE:	ceasar.py - the code for the Caesar cipher for a simple substitution
 --
 --	DATE:			Jan 14, 2024
 --				    Added personal function for assignment
@@ -15,7 +15,6 @@
 #include "Task2.h"
 
 const int MAXSUB = 28;
-char sub[MAXSUB] = "qazwsxedcrfvtgbyhnujm ikolp";
 char alphabet[MAXSUB] = "abcdefghijklmnopqrstuvwxyz";
 
 string Task2::getFileNameInput(const string& prompt) {
@@ -41,7 +40,7 @@ bool Task2::isValidExtension(const string& fileName) {
 }
 
 
-void Task2::encode(const string &inFile, const string &outFile) {
+void Task2::encode(const string &inFile, const string &outFile, int shift) {
     char ch;
     ifstream fp1(inFile);
     ofstream fp2(outFile);
@@ -57,34 +56,11 @@ void Task2::encode(const string &inFile, const string &outFile) {
     }
 
     while (fp1.get(ch)) {
-        ch = tolower(ch);
-        if (isalpha(ch) || ch == ' ')
-            ch = sub[LocateIndex(alphabet, ch)];
-        if (ch != '\0')
-            fp2.put(ch);
-    }
-}
-
-
-void Task2::decode(const string &inFile, const string &outFile) {
-    char ch;
-    ifstream fp1(inFile);
-    ofstream fp2(outFile);
-
-    if (!fp1) {
-        cerr << "Input file is wrong" << endl;
-        exit(1);
-    }
-
-    if (!fp2) {
-        cerr << "Output file is wrong" << endl;
-        exit(1);
-    }
-
-    while (fp1.get(ch)) {
-        ch = tolower(ch);
-        if (isalpha(ch) || ch == ' ')
-            ch = alphabet[LocateIndex(sub, ch)];
+        if (isalpha(ch)) {
+            char base = islower(ch) ? 'a' : 'A';
+            ch = (ch - base + shift) % 26 + base;
+        }
+        // Write the encoded character to the output file
         fp2.put(ch);
     }
 }
@@ -141,42 +117,44 @@ void Task2::calculateDistributions(const string &fileName, bool flag) {
         appendToCSV("plain.csv", "Plain txt result");
     else
         appendToCSV("encode.csv", "Encoded txt result");
-    // Close the file stream
+
     fp.close();
 }
 
 
-void Task2::printConditionalProbabilities(const string& fileName) {
-    unordered_map<char, double> plainTextProbabilities; // Fill this with actual data
-
-    ifstream file(fileName);
-    if (!file.is_open()) {
-        cerr << "Error opening file" << endl;
+void Task2::setConditionalProbabilities(const string& fileName1, const string& fileName2) {
+    ifstream file1(fileName1);
+    if (!file1.is_open()) {
+        cerr << "Error opening file1" << endl;
         return;
     }
 
-    string line;
-    getline(file, line);
+    ifstream file2(fileName2);
+    if (!file1.is_open()) {
+        cerr << "Error opening file2" << endl;
+        return;
+    }
 
-    while (getline(file, line)) {
-        stringstream ss(line);
+    string line1 ,line2;
+    getline(file1, line1);
+    getline(file2, line2);
+
+    while (getline(file1, line1)) {
+        stringstream ss(line1);
         char ch;
         double prob;
-        if (ss >> ch && ss.ignore(256, ',') && ss >> prob) {
-            plainTextProbabilities[ch] = prob;
+        if (ss >> ch && ss.ignore(64, ',') && ss >> prob) {
+            plainTxtProb[ch] = prob;
         }
     }
 
-    int shift = 2; // The Caesar cipher shift
-
-    // Print the conditional probabilities for the six most frequent letters
-    for (char plainChar : {'e', 't', 'a', 'i', 'o', 'n'}) {
-        // Calculate the corresponding cipher character given the shift
-        char cipherChar = ((plainChar + shift) % 26) + 'a';
-
-        // Print the conditional probability
-        double probability = plainTextProbabilities.find(plainChar) != plainTextProbabilities.end() ? plainTextProbabilities[plainChar] : 0;
-        cout << "P(" << plainChar << "|" << cipherChar << ") = " << probability << endl;
+    while (getline(file2, line2)) {
+        stringstream ss(line2);
+        char ch;
+        double prob;
+        if (ss >> ch && ss.ignore(64, ',') && ss >> prob) {
+            cipherTxtProb[ch] = prob;
+        }
     }
 }
 
@@ -203,3 +181,13 @@ void Task2::appendToCSV(const string &fileName, const string &instruction) {
     file << endl;
     file.close();
 }
+
+
+void Task2::printConditionalProbabilities(int key) {
+    for (char plainChar : {'e', 't', 'a', 'i', 'o', 'n'}) {
+        char cipherChar = (plainChar  - 'a' + key) % 26 + 'a';
+        std::cout << "P(M=" << plainChar << "|" << cipherChar << ") = "
+            << plainTxtProb[plainChar] / cipherTxtProb[cipherChar] << std::endl;
+    }
+}
+
