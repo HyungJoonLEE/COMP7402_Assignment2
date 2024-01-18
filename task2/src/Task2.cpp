@@ -14,8 +14,6 @@
 
 #include "Task2.h"
 
-const int MAXSUB = 28;
-char alphabet[MAXSUB] = "abcdefghijklmnopqrstuvwxyz";
 
 string Task2::getFileNameInput(const string& prompt) {
     string input;
@@ -60,7 +58,7 @@ void Task2::encode(const string &inFile, const string &outFile, int shift) {
             char base = islower(ch) ? 'a' : 'A';
             ch = (ch - base + shift) % 26 + base;
         }
-        // Write the encoded character to the output file
+
         fp2.put(ch);
     }
 }
@@ -191,5 +189,6 @@ void Task2::printConditionalProbabilities(int key, const string &fileName) {
     }
     cout << endl;
     file << endl;
+    file.close();
 }
 
