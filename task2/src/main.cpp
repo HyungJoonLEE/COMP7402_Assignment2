@@ -2,10 +2,10 @@
 
 int main() {
     Task2 t2;
-    int offset = 14;
 
     string inFile = t2.getFileNameInput("Please enter the name of the text file to read from (e.g., 'input.txt'): ");
     string outFile = t2.getFileNameInput("Please enter the name of the text file to write to (e.g., 'output.txt'): ");
+    int offset = t2.getOffsetInput("Please enter the offset between 1 and 26: ");
 
     t2.encode(inFile, outFile, offset);
 

@@ -11,6 +11,7 @@
 #include <iomanip>
 #include <unordered_map>
 #include <vector>
+#include <limits>
 
 #define INPUT 0
 #define OUTPUT 1
@@ -30,6 +31,7 @@ private:
     void calculateProbability();
 public:
     string getFileNameInput(const string& prompt);
+    int getOffsetInput(const string& prompt);
     bool isValidExtension(const string& fileName);
     void encode(const string& inFile, const string& outFile, int shift);
     void calculateDistributions(const string& fileName, bool flag);

@@ -28,6 +28,25 @@ string Task2::getFileNameInput(const string& prompt) {
 }
 
 
+int Task2::getOffsetInput(const string &prompt) {
+    int offset;
+    while (true) {
+        cout << prompt;
+        cin >> offset;
+
+        if (cin.fail() || offset < 1 || offset > 26) {
+            cout << "Invalid input. Please enter a positive integer.\n";
+            cin.clear(); // Clear error flags
+            cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Ignore remaining input
+        }
+        else {
+            break;
+        }
+    }
+    return offset;
+}
+
+
 bool Task2::isValidExtension(const string& fileName) {
     size_t dotPosition = fileName.find_last_of('.');
     if (dotPosition != string::npos) {
@@ -191,4 +210,6 @@ void Task2::printConditionalProbabilities(int key, const string &fileName) {
     file << endl;
     file.close();
 }
+
+
 
