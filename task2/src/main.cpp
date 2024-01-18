@@ -2,7 +2,7 @@
 
 int main() {
     Task2 t2;
-    int offset = 3;
+    int offset = 14;
 
     string inFile = t2.getFileNameInput("Please enter the name of the text file to read from (e.g., 'input.txt'): ");
     string outFile = t2.getFileNameInput("Please enter the name of the text file to write to (e.g., 'output.txt'): ");
