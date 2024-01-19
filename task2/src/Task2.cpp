@@ -88,7 +88,7 @@ void Task2::calculateFrequency(ifstream &fp) {
     totalCharacters = 0;
     while (fp.get(ch)) {
         ch = tolower(ch);
-        if (isalpha(ch) || ch == ' ') {
+        if (isalpha(ch)) {
             frequencyMap[ch]++;
             totalCharacters++;
         }
