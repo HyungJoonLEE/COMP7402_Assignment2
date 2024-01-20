@@ -7,6 +7,7 @@
 #include <unordered_map>
 #include <iostream>
 #include <fstream>
+#include <sstream>
 #include <cctype>
 #include <iomanip>
 #include <unordered_map>
